@@ -1,6 +1,7 @@
 import socket
 import json
 import time
+import sys
 
 from common.utils import send_message, receive_message, parameters_check
 
@@ -39,7 +40,7 @@ def create_message(account_name='Guest', message_type=PRESENCE, to_user='', mess
 
 def main():
 
-    server_port, host_number = parameters_check()
+    server_port, host_number = parameters_check(sys.argv)
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((host_number, server_port))

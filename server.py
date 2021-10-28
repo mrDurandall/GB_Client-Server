@@ -1,5 +1,6 @@
 import socket
 import json
+import sys
 
 from common.utils import send_message, receive_message, parameters_check
 
@@ -33,7 +34,7 @@ def process_message(message):
 
 def main():
 
-    listen_port, host_number = parameters_check()
+    listen_port, host_number = parameters_check(sys.argv)
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((host_number, listen_port))

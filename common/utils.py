@@ -26,11 +26,11 @@ def receive_message(client):
     raise ValueError
 
 
-def parameters_check():
-
+def parameters_check(args):
+    print(args)
     try:
-        if '-p' in sys.argv:
-            listen_port = int(sys.argv[sys.argv.index('-p') + 1])
+        if '-p' in args:
+            listen_port = int(args[args.index('-p') + 1])
         else:
             listen_port = DEFAULT_PORT
         if listen_port < 1024 or listen_port > 65535:
@@ -43,8 +43,8 @@ def parameters_check():
         sys.exit(1)
 
     try:
-        if '-a' in sys.argv:
-            host_number = sys.argv[sys.argv.index('-a') + 1]
+        if '-a' in args:
+            host_number = args[args.index('-a') + 1]
         else:
             host_number = DEFAULT_HOST
     except IndexError:
