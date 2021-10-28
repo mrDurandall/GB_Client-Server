@@ -79,3 +79,17 @@ class ReceiveMessageTest(unittest.TestCase):
         '''
         test_socket = IncorrectTestSocket(self.incorrect_response)
         self.assertRaises(ValueError, receive_message, test_socket)
+
+
+class ParametersCheckTest(unittest.TestCase):
+
+    def test_correct_parameters(self):
+        self.assertEqual(parameters_check(['-p', '7777', '-a', '127.0.0.1']), (7777, '127.0.0.1'))
+
+    def test_incorrect_port(self):
+        self.assertRaises(SystemExit, parameters_check, ['-p', '1000'])
+        self.assertRaises(SystemExit, parameters_check, ['-p'])
+
+    def test_incorrect_host(self):
+        self.assertRaises(SystemExit, parameters_check, ['-a'])
+

@@ -27,7 +27,7 @@ def receive_message(client):
 
 
 def parameters_check(args):
-    print(args)
+
     try:
         if '-p' in args:
             listen_port = int(args[args.index('-p') + 1])
