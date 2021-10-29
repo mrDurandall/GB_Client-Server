@@ -1,0 +1,8 @@
+2021-10-29 23:35:06   CRITICAL   client_log_config.py      crit
+2021-10-29 23:35:06   ERROR      client_log_config.py      err
+2021-10-29 23:35:06   WARNING    client_log_config.py      warn
+2021-10-29 23:35:06   INFO       client_log_config.py      inf
+2021-10-29 23:45:45   INFO       client.py                 Установлено соединение с сервером по адресу 127.0.0.1 через порт 7777
+2021-10-29 23:45:53   INFO       client.py                 сформировано сообщение {'action': 'presence', 'time': 1635540353.9423969, 'user': {'account': 'Guest'}}
+2021-10-29 23:45:53   INFO       client.py                 Сообщение отправлено серверу
+2021-10-29 23:45:53   INFO       client.py                 Принят ответ от сервера response 200: OK
