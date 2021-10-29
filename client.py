@@ -2,10 +2,16 @@ import socket
 import json
 import time
 import sys
+import logging
+
+import logs.client_log_config
 
 from common.utils import send_message, receive_message, parameters_check
 
 from common.variables import *
+
+
+log = logging.getLogger('client_log')
 
 
 def process_server_response(message):
@@ -41,6 +47,7 @@ def create_message(account_name='Guest', message_type=PRESENCE, to_user='', mess
 def main():
 
     server_port, host_number = parameters_check(sys.argv)
+    log.info(f'Установлено соединение с сервером по адресу {host_number} через порт {server_port}')
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((host_number, server_port))
@@ -59,13 +66,17 @@ def main():
                                      to_user=to_user)
         else:
             print('Некорректный тип сообщения!')
+            log.error('Введен некорректный тип сообщения')
             continue
+        log.info(f'сформировано сообщение {message}')
         send_message(client_socket, message)
+        log.info(f'Сообщение отправлено серверу')
         try:
             answer = process_server_response(receive_message(client_socket))
+            log.info(f'Принят ответ от сервера {answer}')
             print(answer)
         except (ValueError, json.JSONDecodeError):
-            print('Некорректное сообщение сервера')
+            log.error('Некорректное сообщение сервера')
 
 
 if __name__ == '__main__':

@@ -1,10 +1,15 @@
 import socket
 import json
 import sys
+import logging
+import logs.server_log_config
 
 from common.utils import send_message, receive_message, parameters_check
 
 from common.variables import *
+
+
+log = logging.getLogger('server_log')
 
 
 def process_message(message):
@@ -35,6 +40,7 @@ def process_message(message):
 def main():
 
     listen_port, host_number = parameters_check(sys.argv)
+    log.info(f'Запущен сервер. Адрес {host_number}, порт для подключения {listen_port}')
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((host_number, listen_port))
@@ -42,13 +48,17 @@ def main():
 
     while True:
         client, address = server_socket.accept()
+        log.info(f'Установлено соединение с клиентом по адресу {address}')
         try:
             message = receive_message(client)
+            log.info(f'Получено сообщение {message}')
             server_response = process_message(message)
+            log.info(f'сформирован ответ {server_response}')
             send_message(client, server_response)
             client.close()
+            log.info('Соединение закрыто')
         except (ValueError, json.JSONDecodeError):
-            print('Принято некорреткное сообщение!')
+            log.error('Принято некорректное сообщение!')
             client.close()
 
 

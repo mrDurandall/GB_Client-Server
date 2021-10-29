@@ -18,3 +18,6 @@ MESSAGE = 'message'
 PRESENCE = 'presence'
 RESPONSE = 'response'
 ERROR = 'error'
+
+LOGGING_STRING_FORMAT = '%(asctime)-21s %(levelname)-10s %(filename)-25s %(message)s'
+LOGGING_DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
