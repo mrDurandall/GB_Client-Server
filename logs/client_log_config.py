@@ -6,7 +6,7 @@ import logging.handlers
 from common.variables import LOGGING_STRING_FORMAT, LOGGING_DATE_FORMAT
 
 log = logging.getLogger('client_log')
-log.setLevel(logging.INFO)
+log.setLevel(logging.DEBUG)
 
 PATH_TO_FILE = os.path.dirname(os.path.abspath(__file__))
 PATH_TO_FILE = os.path.join(PATH_TO_FILE, 'client_logs', 'client.log')

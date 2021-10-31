@@ -10,10 +10,13 @@ from common.utils import send_message, receive_message, parameters_check
 
 from common.variables import *
 
+from common.decorators import log_it
+
 
 log = logging.getLogger('client_log')
 
 
+@log_it
 def process_server_response(message):
     if RESPONSE in message:
         if message[RESPONSE] == '200':
@@ -22,6 +25,7 @@ def process_server_response(message):
     raise ValueError
 
 
+@log_it
 def create_message(account_name='Guest', message_type=PRESENCE, to_user='', message_text=''):
     if message_type == PRESENCE:
         message = {

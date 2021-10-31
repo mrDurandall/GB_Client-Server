@@ -4,6 +4,8 @@ import sys
 import logging
 import logs.server_log_config
 
+from common.decorators import log_it
+
 from common.utils import send_message, receive_message, parameters_check
 
 from common.variables import *
@@ -12,6 +14,7 @@ from common.variables import *
 log = logging.getLogger('server_log')
 
 
+@log_it
 def process_message(message):
     if ACTION in message and\
             message[ACTION] == PRESENCE and\

@@ -3,7 +3,10 @@ import sys
 
 from common.variables import ENCODING, MAX_PACKAGE, DEFAULT_PORT, DEFAULT_HOST
 
+from common.decorators import log_it
 
+
+@log_it
 def send_message(sock, message):
 
     if isinstance(message, dict):
@@ -14,6 +17,7 @@ def send_message(sock, message):
         raise ValueError
 
 
+@log_it
 def receive_message(client):
 
     bytes_response = client.recv(MAX_PACKAGE)
@@ -26,6 +30,7 @@ def receive_message(client):
     raise ValueError
 
 
+@log_it
 def parameters_check(args):
 
     try:
