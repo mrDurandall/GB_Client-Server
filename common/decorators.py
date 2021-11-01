@@ -17,7 +17,7 @@ def log_it(func):
         file_name = inspect.stack()[1][1].split("\\")[-1]
         log.debug(f'Вызвана функция {func.__name__} из модуля {func.__module__} с параметрами {args}, {kwargs}. '
                   f'Вызов произведен из функции {traceback.format_stack()[0].strip().split()[-1]} '
-                  f'файла {file_name}.')
+                  f'файла {file_name}.', stacklevel=2)
         return decorated_func
 
     return wrapper

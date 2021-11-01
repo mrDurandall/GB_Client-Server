@@ -1,0 +1,103 @@
+2021-10-31 20:14:08   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 20:14:08   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 20:17:36   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 20:17:48   INFO       server.py                 Установлено соединение с клиентом по адресу ('127.0.0.1', 53525)
+2021-10-31 20:17:51   INFO       server.py                 Получено сообщение {'action': 'presence', 'time': 1635700671.3875377, 'user': {'account': 'Guest'}}
+2021-10-31 20:17:51   INFO       server.py                 сформирован ответ {'response': '200'}
+2021-10-31 20:17:51   INFO       server.py                 Соединение закрыто
+2021-10-31 20:32:05   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 20:32:10   INFO       server.py                 Установлено соединение с клиентом по адресу ('127.0.0.1', 52226)
+2021-10-31 20:32:15   INFO       server.py                 Получено сообщение {'action': 'presence', 'time': 1635701535.523199, 'user': {'account': 'Guest'}}
+2021-10-31 20:33:25   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 20:33:30   INFO       server.py                 Установлено соединение с клиентом по адресу ('127.0.0.1', 51795)
+2021-10-31 20:33:33   INFO       server.py                 Получено сообщение {'action': 'presence', 'time': 1635701613.6827285, 'user': {'account': 'Guest'}}
+2021-10-31 20:34:31   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 20:34:34   INFO       server.py                 Установлено соединение с клиентом по адресу ('127.0.0.1', 52036)
+2021-10-31 20:34:36   INFO       server.py                 Получено сообщение {'action': 'presence', 'time': 1635701676.114854, 'user': {'account': 'Guest'}}
+2021-10-31 20:34:36   INFO       server.py                 сформирован ответ {'response': '200'}
+2021-10-31 20:34:36   INFO       server.py                 Соединение закрыто
+2021-10-31 20:35:34   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 20:35:37   INFO       server.py                 Установлено соединение с клиентом по адресу ('127.0.0.1', 52229)
+2021-10-31 20:35:39   INFO       server.py                 Получено сообщение {'action': 'presence', 'time': 1635701739.3869197, 'user': {'account': 'Guest'}}
+2021-10-31 20:35:39   INFO       server.py                 сформирован ответ {'response': '200'}
+2021-10-31 20:35:39   INFO       server.py                 Соединение закрыто
+2021-10-31 20:36:58   CRITICAL   server_log_config.py      crit
+2021-10-31 20:36:58   ERROR      server_log_config.py      err
+2021-10-31 20:36:58   WARNING    server_log_config.py      warn
+2021-10-31 20:36:58   INFO       server_log_config.py      inf
+2021-10-31 20:36:58   DEBUG      server_log_config.py      debug
+2021-10-31 20:42:58   DEBUG      decorators.py             Вызвана функция parameters_check из модуля common.utils с параметрами (['D:/GeekBrains/Клиент-серверные приложения/Project/server.py', '-a', '127.0.0.1', '-p', '7777'],), {}.
+2021-10-31 20:42:58   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 20:43:05   INFO       server.py                 Установлено соединение с клиентом по адресу ('127.0.0.1', 58853)
+2021-10-31 20:43:35   DEBUG      decorators.py             Вызвана функция receive_message из модуля common.utils с параметрами (<socket.socket fd=296, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58853)>,), {}.
+2021-10-31 20:43:35   INFO       server.py                 Получено сообщение {'action': 'presence', 'time': 1635702215.8150315, 'user': {'account': 'Guest'}}
+2021-10-31 20:43:35   DEBUG      decorators.py             Вызвана функция process_message из модуля __main__ с параметрами ({'action': 'presence', 'time': 1635702215.8150315, 'user': {'account': 'Guest'}},), {}.
+2021-10-31 20:43:35   INFO       server.py                 сформирован ответ {'response': '200'}
+2021-10-31 20:43:35   DEBUG      decorators.py             Вызвана функция send_message из модуля common.utils с параметрами (<socket.socket fd=296, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58853)>, {'response': '200'}), {}.
+2021-10-31 20:43:35   INFO       server.py                 Соединение закрыто
+2021-10-31 20:54:07   DEBUG      decorators.py             Вызвана функция parameters_check из модуля common.utils с параметрами (['D:/GeekBrains/Клиент-серверные приложения/Project/server.py', '-a', '127.0.0.1', '-p', '7777'],), {}.Вызов произведен из функции main()
+2021-10-31 20:54:07   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 20:54:10   INFO       server.py                 Установлено соединение с клиентом по адресу ('127.0.0.1', 63114)
+2021-10-31 20:54:14   DEBUG      decorators.py             Вызвана функция receive_message из модуля common.utils с параметрами (<socket.socket fd=420, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 63114)>,), {}.Вызов произведен из функции main()
+2021-10-31 20:54:14   INFO       server.py                 Получено сообщение {'action': 'presence', 'time': 1635702854.1143966, 'user': {'account': 'Guest'}}
+2021-10-31 20:54:14   DEBUG      decorators.py             Вызвана функция process_message из модуля __main__ с параметрами ({'action': 'presence', 'time': 1635702854.1143966, 'user': {'account': 'Guest'}},), {}.Вызов произведен из функции main()
+2021-10-31 20:54:14   INFO       server.py                 сформирован ответ {'response': '200'}
+2021-10-31 20:54:14   DEBUG      decorators.py             Вызвана функция send_message из модуля common.utils с параметрами (<socket.socket fd=420, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 63114)>, {'response': '200'}), {}.Вызов произведен из функции main()
+2021-10-31 20:54:14   INFO       server.py                 Соединение закрыто
+2021-10-31 20:56:07   DEBUG      decorators.py             Вызвана функция parameters_check из модуля common.utils с параметрами (['D:/GeekBrains/Клиент-серверные приложения/Project/server.py', '-a', '127.0.0.1', '-p', '7777'],), {}. Вызов произведен из функции main()Вызов из функции main.
+2021-10-31 20:56:07   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 20:56:10   INFO       server.py                 Установлено соединение с клиентом по адресу ('127.0.0.1', 63703)
+2021-10-31 20:56:12   DEBUG      decorators.py             Вызвана функция receive_message из модуля common.utils с параметрами (<socket.socket fd=408, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 63703)>,), {}. Вызов произведен из функции main()Вызов из функции main.
+2021-10-31 20:56:12   INFO       server.py                 Получено сообщение {'action': 'presence', 'time': 1635702972.0183287, 'user': {'account': 'Guest'}}
+2021-10-31 20:56:12   DEBUG      decorators.py             Вызвана функция process_message из модуля __main__ с параметрами ({'action': 'presence', 'time': 1635702972.0183287, 'user': {'account': 'Guest'}},), {}. Вызов произведен из функции main()Вызов из функции main.
+2021-10-31 20:56:12   INFO       server.py                 сформирован ответ {'response': '200'}
+2021-10-31 20:56:12   DEBUG      decorators.py             Вызвана функция send_message из модуля common.utils с параметрами (<socket.socket fd=408, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 63703)>, {'response': '200'}), {}. Вызов произведен из функции main()Вызов из функции main.
+2021-10-31 20:56:12   INFO       server.py                 Соединение закрыто
+2021-10-31 20:58:34   DEBUG      decorators.py             Вызвана функция parameters_check из модуля common.utils с параметрами (['D:/GeekBrains/Клиент-серверные приложения/Project/server.py', '-a', '127.0.0.1', '-p', '7777'],), {}. Вызов произведен из функции main(). Вызов из функции main.
+2021-10-31 20:58:34   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 20:58:36   INFO       server.py                 Установлено соединение с клиентом по адресу ('127.0.0.1', 64330)
+2021-10-31 20:59:14   DEBUG      decorators.py             Вызвана функция parameters_check из модуля common.utils с параметрами (['D:/GeekBrains/Клиент-серверные приложения/Project/server.py', '-a', '127.0.0.1', '-p', '7777'],), {}. Вызов произведен из функции main(). Вызов из функции main.
+2021-10-31 20:59:14   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 20:59:18   INFO       server.py                 Установлено соединение с клиентом по адресу ('127.0.0.1', 64495)
+2021-10-31 21:00:06   DEBUG      decorators.py             Вызвана функция receive_message из модуля common.utils с параметрами (<socket.socket fd=372, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 64495)>,), {}. Вызов произведен из функции main(). Вызов из функции main.
+2021-10-31 21:00:06   INFO       server.py                 Получено сообщение {'action': 'presence', 'time': 1635703206.9766123, 'user': {'account': 'Guest'}}
+2021-10-31 21:00:06   DEBUG      decorators.py             Вызвана функция process_message из модуля __main__ с параметрами ({'action': 'presence', 'time': 1635703206.9766123, 'user': {'account': 'Guest'}},), {}. Вызов произведен из функции main(). Вызов из функции main.
+2021-10-31 21:00:07   INFO       server.py                 сформирован ответ {'response': '200'}
+2021-10-31 21:00:07   DEBUG      decorators.py             Вызвана функция send_message из модуля common.utils с параметрами (<socket.socket fd=372, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 64495)>, {'response': '200'}), {}. Вызов произведен из функции main(). Вызов из функции main.
+2021-10-31 21:00:07   INFO       server.py                 Соединение закрыто
+2021-10-31 21:00:21   DEBUG      decorators.py             Вызвана функция parameters_check из модуля common.utils с параметрами (['D:/GeekBrains/Клиент-серверные приложения/Project/server.py', '-a', '127.0.0.1', '-p', '7777'],), {}. Вызов произведен из функции main(). Вызов из функции main.
+2021-10-31 21:00:21   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 21:00:23   INFO       server.py                 Установлено соединение с клиентом по адресу ('127.0.0.1', 64788)
+2021-10-31 21:00:52   DEBUG      decorators.py             Вызвана функция parameters_check из модуля common.utils с параметрами (['D:/GeekBrains/Клиент-серверные приложения/Project/server.py', '-a', '127.0.0.1', '-p', '7777'],), {}. Вызов произведен из функции main(). Вызов из функции main.
+2021-10-31 21:00:52   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 21:01:01   DEBUG      decorators.py             Вызвана функция parameters_check из модуля common.utils с параметрами (['D:/GeekBrains/Клиент-серверные приложения/Project/server.py', '-a', '127.0.0.1', '-p', '7777'],), {}. Вызов произведен из функции main(). Вызов из функции main.
+2021-10-31 21:01:01   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 21:02:25   INFO       server.py                 Установлено соединение с клиентом по адресу ('127.0.0.1', 65259)
+2021-10-31 21:02:27   DEBUG      decorators.py             Вызвана функция receive_message из модуля common.utils с параметрами (<socket.socket fd=408, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 65259)>,), {}. Вызов произведен из функции main(). Вызов из функции main.
+2021-10-31 21:02:27   INFO       server.py                 Получено сообщение {'action': 'presence', 'time': 1635703347.6316907, 'user': {'account': 'Guest'}}
+2021-10-31 21:02:27   DEBUG      decorators.py             Вызвана функция process_message из модуля __main__ с параметрами ({'action': 'presence', 'time': 1635703347.6316907, 'user': {'account': 'Guest'}},), {}. Вызов произведен из функции main(). Вызов из функции main.
+2021-10-31 21:02:27   INFO       server.py                 сформирован ответ {'response': '200'}
+2021-10-31 21:02:27   DEBUG      decorators.py             Вызвана функция send_message из модуля common.utils с параметрами (<socket.socket fd=408, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 65259)>, {'response': '200'}), {}. Вызов произведен из функции main(). Вызов из функции main.
+2021-10-31 21:02:28   INFO       server.py                 Соединение закрыто
+2021-10-31 21:03:28   DEBUG      decorators.py             Вызвана функция parameters_check из модуля common.utils с параметрами (['D:/GeekBrains/Клиент-серверные приложения/Project/server.py', '-a', '127.0.0.1', '-p', '7777'],), {}. Вызов произведен из функции main(). Вызов из функции main.
+2021-10-31 21:03:28   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 21:05:45   DEBUG      decorators.py             Вызвана функция parameters_check из модуля common.utils с параметрами (['D:/GeekBrains/Клиент-серверные приложения/Project/server.py', '-a', '127.0.0.1', '-p', '7777'],), {}. Вызов произведен из функции main(). Вызов из функции main.
+2021-10-31 21:05:45   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 21:06:29   INFO       server.py                 Установлено соединение с клиентом по адресу ('127.0.0.1', 54331)
+2021-10-31 21:06:32   DEBUG      decorators.py             Вызвана функция receive_message из модуля common.utils с параметрами (<socket.socket fd=288, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 54331)>,), {}. Вызов произведен из функции main(). Вызов из функции main.
+2021-10-31 21:06:32   INFO       server.py                 Получено сообщение {'action': 'presence', 'time': 1635703592.1347892, 'user': {'account': 'Guest'}}
+2021-10-31 21:06:32   DEBUG      decorators.py             Вызвана функция process_message из модуля __main__ с параметрами ({'action': 'presence', 'time': 1635703592.1347892, 'user': {'account': 'Guest'}},), {}. Вызов произведен из функции main(). Вызов из функции main.
+2021-10-31 21:06:32   INFO       server.py                 сформирован ответ {'response': '200'}
+2021-10-31 21:06:32   DEBUG      decorators.py             Вызвана функция send_message из модуля common.utils с параметрами (<socket.socket fd=288, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 54331)>, {'response': '200'}), {}. Вызов произведен из функции main(). Вызов из функции main.
+2021-10-31 21:06:32   INFO       server.py                 Соединение закрыто
+2021-10-31 21:11:19   DEBUG      decorators.py             Вызвана функция parameters_check из модуля common.utils с параметрами (['D:/GeekBrains/Клиент-серверные приложения/Project/server.py', '-a', '127.0.0.1', '-p', '7777'],), {}. Вызов произведен из функции main() файла ['D:\\GeekBrains\\Клиент-серверные приложения\\Project\\server.py'].
+2021-10-31 21:11:19   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 21:11:52   DEBUG      decorators.py             Вызвана функция parameters_check из модуля common.utils с параметрами (['D:/GeekBrains/Клиент-серверные приложения/Project/server.py', '-a', '127.0.0.1', '-p', '7777'],), {}. Вызов произведен из функции main() файла ['D:\\GeekBrains\\Клиент-серверные приложения\\Project\\server.py'].
+2021-10-31 21:11:52   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 21:12:32   DEBUG      decorators.py             Вызвана функция parameters_check из модуля common.utils с параметрами (['D:/GeekBrains/Клиент-серверные приложения/Project/server.py', '-a', '127.0.0.1', '-p', '7777'],), {}. Вызов произведен из функции main() файла ['D:\\GeekBrains\\Клиент-серверные приложения\\Project\\server.py'].
+2021-10-31 21:12:32   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
+2021-10-31 21:18:19   INFO       server.py                 Установлено соединение с клиентом по адресу ('127.0.0.1', 58265)
+2021-10-31 21:18:19   DEBUG      decorators.py             Вызвана функция receive_message из модуля common.utils с параметрами (<socket.socket fd=416, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 58265)>,), {}. Вызов произведен из функции main() файла ['D:\\GeekBrains\\Клиент-серверные приложения\\Project\\server.py'].
+2021-10-31 21:18:19   INFO       server.py                 Получено сообщение {'action': 'presence', 'time': 1635704299.4936397, 'user': {'account_name': 'Guest'}}
+2021-10-31 21:19:46   DEBUG      decorators.py             Вызвана функция parameters_check из модуля common.utils с параметрами (['D:/GeekBrains/Клиент-серверные приложения/Project/server.py', '-a', '127.0.0.1', '-p', '7777'],), {}. Вызов произведен из функции main() файла server.py.
+2021-10-31 21:19:46   INFO       server.py                 Запущен сервер. Адрес 127.0.0.1, порт для подключения 7777
