@@ -1,16 +1,14 @@
 import socket
-import json
 import time
 import sys
 import logging
 import argparse
+import ipaddress
 
 import logs.client_log_config
 
 from common.utils import send_message, receive_message
-
 from common.variables import *
-
 from common.decorators import log_it
 
 
@@ -50,11 +48,10 @@ def client_args():
         log.critical('Прослушиваемый порт должен быть в диапазоне от 1025 до 65635')
         sys.exit(-1)
 
-    if namespace.host_address != '':
+    if namespace.listen_host != '':
         try:
-            ip = socket.inet_aton(namespace.host_address)
-            print(ip)
-        except socket.error:
+            ipaddress.ip_address(namespace.listen_host)
+        except ValueError:
             log.critical('Некорректный ip-адрес')
             sys.exit(-1)
 

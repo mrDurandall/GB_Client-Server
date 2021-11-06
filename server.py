@@ -7,6 +7,7 @@ import time
 import logs.server_log_config
 import argparse
 import select
+import ipaddress
 
 from common.decorators import log_it
 
@@ -43,8 +44,8 @@ def server_args():
 
     if namespace.listen_host != '':
         try:
-            socket.inet_aton(namespace.listen_host)
-        except socket.error:
+            ipaddress.ip_address(namespace.listen_host)
+        except ValueError:
             log.critical('Некорректный ip-адрес')
             sys.exit(-1)
 
