@@ -3,10 +3,11 @@ import json
 import time
 import sys
 import logging
+import argparse
 
 import logs.client_log_config
 
-from common.utils import send_message, receive_message, parameters_check
+from common.utils import send_message, receive_message
 
 from common.variables import *
 
@@ -14,6 +15,54 @@ from common.decorators import log_it
 
 
 log = logging.getLogger('client_log')
+
+
+@log_it
+def client_args():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-p',
+                        '--port',
+                        type=int,
+                        default=DEFAULT_PORT,
+                        nargs='?',
+                        help=f'Задает порт для подключения на сервере,'
+                             f' если не задан, соединяемся с портом {DEFAULT_PORT}')
+    parser.add_argument('-a',
+                        '--host_address',
+                        default=DEFAULT_HOST,
+                        nargs='?',
+                        help=f'Задает адрес сервера.'
+                             f' Если не задан связываемся с {DEFAULT_HOST}')
+    parser.add_argument('-m',
+                        '--mode',
+                        default='listen',
+                        nargs='?',
+                        help='Задает режим клиента.\n'
+                             'send для отправки сообщений\n'
+                             'listen для получения сообщений')
+
+    namespace = parser.parse_args()
+
+    print(namespace)
+
+    if not 1023 < namespace.port < 65536:
+        log.critical('Прослушиваемый порт должен быть в диапазоне от 1025 до 65635')
+        sys.exit(-1)
+
+    if namespace.host_address != '':
+        try:
+            ip = socket.inet_aton(namespace.host_address)
+            print(ip)
+        except socket.error:
+            log.critical('Некорректный ip-адрес')
+            sys.exit(-1)
+
+    if namespace.mode not in ('listen', 'send'):
+        log.critical('Некорректно указан режим клиента.')
+        sys.exit(-1)
+
+    return namespace.port, namespace.host_address, namespace.mode
 
 
 @log_it
@@ -26,7 +75,7 @@ def process_server_response(message):
 
 
 @log_it
-def create_message(account_name='Guest', message_type=PRESENCE, to_user='', message_text=''):
+def create_message(account_name='Guest', message_type=PRESENCE, message_text=''):
     if message_type == PRESENCE:
         message = {
             ACTION: message_type,
@@ -41,7 +90,6 @@ def create_message(account_name='Guest', message_type=PRESENCE, to_user='', mess
             ACTION: message_type,
             TIME: time.time(),
             FROM: account_name,
-            TO: to_user,
             MESSAGE_TEXT: message_text
         }
         return message
@@ -49,38 +97,43 @@ def create_message(account_name='Guest', message_type=PRESENCE, to_user='', mess
 
 
 def main():
-
-    server_port, host_number = parameters_check(sys.argv)
+    username = input('Введите ваше имя: ')
+    server_port, host_number, mode = client_args()
     log.info(f'Установлено соединение с сервером по адресу {host_number} через порт {server_port}')
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((host_number, server_port))
+    send_message(client_socket, create_message(account_name=username))
+    server_answer = process_server_response(receive_message(client_socket))
+    log.info(f'Получен ответ от сервера {server_answer}')
+
+    if mode == 'listen':
+        print('Режим работы - получение сообщений')
+    else:
+        print('Режим работы - отправка сообщений')
 
     while True:
-        message_type = input('Введите тип вообщени\n'
-                             'p - сообщение о присутствии\n'
-                             'm - текстовое сообщение)\n')
-        if message_type == 'p':
-            message = create_message()
-        elif message_type == 'm':
-            to_user = input('Введите имя получателя: ')
-            message_text = input('Введите текст сообщения: ')
-            message = create_message(message_type=MESSAGE,
-                                     message_text=message_text,
-                                     to_user=to_user)
-        else:
-            print('Некорректный тип сообщения!')
-            log.error('Введен некорректный тип сообщения')
-            continue
-        log.info(f'сформировано сообщение {message}')
-        send_message(client_socket, message)
-        log.info(f'Сообщение отправлено серверу')
-        try:
-            answer = process_server_response(receive_message(client_socket))
-            log.info(f'Принят ответ от сервера {answer}')
-            print(answer)
-        except (ValueError, json.JSONDecodeError):
-            log.error('Некорректное сообщение сервера')
+        if mode == 'send':
+            try:
+                message_text = input('Введите текст сообщения: ')
+                message = create_message(message_type=MESSAGE,
+                                         message_text=message_text,
+                                         account_name=username)
+                log.info(f'сформировано сообщение {message}')
+                send_message(client_socket, message)
+                log.info(f'Сообщение отправлено серверу')
+            except (ConnectionResetError, ConnectionError, ConnectionAbortedError):
+                log.error(f'Соединение с сервером {host_number} было потеряно.')
+                sys.exit(1)
+
+        if mode == 'listen':
+            try:
+                answer = receive_message(client_socket)
+                log.info(f'От пользователя {answer[FROM]} Получено сообщение {answer[MESSAGE_TEXT]}')
+                print(f'{answer[TIME]} {answer[FROM]}: {answer[MESSAGE_TEXT]}')
+            except (ConnectionResetError, ConnectionError, ConnectionAbortedError):
+                log.error(f'Соединение с сервером {host_number} было потеряно.')
+                sys.exit(1)
 
 
 if __name__ == '__main__':
