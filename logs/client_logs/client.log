@@ -97,3 +97,14 @@
 2021-11-01 18:14:44   DEBUG      client.py                 Вызвана функция receive_message из модуля common.utils с параметрами (<socket.socket fd=368, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 50080), raddr=('127.0.0.1', 7777)>,), {}. Вызов произведен из функции main() файла client.py.
 2021-11-01 18:14:44   DEBUG      client.py                 Вызвана функция process_server_response из модуля __main__ с параметрами ({'response': '200'},), {}. Вызов произведен из функции main() файла client.py.
 2021-11-01 18:14:44   INFO       client.py                 Принят ответ от сервера response 200: OK
+2021-11-06 12:33:19   DEBUG      client.py                 Вызвана функция parameters_check из модуля common.utils с параметрами (['D:/GeekBrains/Клиент-серверные приложения/Project/client.py', '-p', '7777'],), {}. Вызов произведен из функции main() файла client.py.
+2021-11-06 12:33:19   INFO       client.py                 Установлено соединение с сервером по адресу 127.0.0.1 через порт 7777
+2021-11-06 12:34:03   DEBUG      client.py                 Вызвана функция parameters_check из модуля common.utils с параметрами (['client.py'],), {}. Вызов произведен из функции main() файла client.py.
+2021-11-06 12:34:03   INFO       client.py                 Установлено соединение с сервером по адресу 127.0.0.1 через порт 9998
+2021-11-06 12:34:06   DEBUG      client.py                 Вызвана функция create_message из модуля __main__ с параметрами (), {}. Вызов произведен из функции main() файла client.py.
+2021-11-06 12:34:06   INFO       client.py                 сформировано сообщение {'action': 'presence', 'time': 1636191246.8321266, 'user': {'account': 'Guest'}}
+2021-11-06 12:34:06   DEBUG      client.py                 Вызвана функция send_message из модуля common.utils с параметрами (<socket.socket fd=300, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 62453), raddr=('127.0.0.1', 9998)>, {'action': 'presence', 'time': 1636191246.8321266, 'user': {'account': 'Guest'}}), {}. Вызов произведен из функции main() файла client.py.
+2021-11-06 12:34:06   INFO       client.py                 Сообщение отправлено серверу
+2021-11-06 12:34:06   DEBUG      client.py                 Вызвана функция receive_message из модуля common.utils с параметрами (<socket.socket fd=300, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 62453), raddr=('127.0.0.1', 9998)>,), {}. Вызов произведен из функции main() файла client.py.
+2021-11-06 12:34:06   DEBUG      client.py                 Вызвана функция process_server_response из модуля __main__ с параметрами ({'response': '200'},), {}. Вызов произведен из функции main() файла client.py.
+2021-11-06 12:34:06   INFO       client.py                 Принят ответ от сервера response 200: OK
