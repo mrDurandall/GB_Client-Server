@@ -58,10 +58,29 @@ def process_message(message, message_list, client, usernames, clients):
             message[ACTION] == PRESENCE and\
             TIME in message and\
             USER in message:
-        print(f'{message[TIME]} Получено сообщение о присутствии '
-              f' от пользователя {message[USER][ACCOUNT_NAME]}')
-        usernames[message[USER][ACCOUNT_NAME]] = client
-        send_message(client, {RESPONSE: '200'})
+        if message[USER][ACCOUNT_NAME] not in usernames:
+            print(f'{message[TIME]} Получено сообщение о присутствии '
+                  f' от пользователя {message[USER][ACCOUNT_NAME]}')
+            usernames[message[USER][ACCOUNT_NAME]] = client
+            send_message(client, {RESPONSE: '200'})
+        else:
+            send_message(client, {RESPONSE: '400', ERROR: 'Имя уже занято!'})
+            clients.remove(client)
+            client.close()
+        return
+    elif ACTION in message and\
+            message[ACTION] == REQUEST_USERS and\
+            TIME in message and\
+            FROM in message:
+        print(f'{message[TIME]} Получен запрос списка пользователей'
+              f' от пользователя {message[FROM]}')
+        users_list = {
+            ACTION: REQUEST_USERS,
+            TIME: time.time(),
+            MESSAGE_TEXT: f'На сервере: \n {" ".join(list(usernames.keys()))}',
+            TO: message[FROM]
+        }
+        send_message(client, users_list)
         return
     elif ACTION in message and\
             message[ACTION] == MESSAGE and\
@@ -75,6 +94,14 @@ def process_message(message, message_list, client, usernames, clients):
               f'с текстом {message[MESSAGE_TEXT]}')
         message_list.append(message)
         return
+    elif ACTION in message and\
+            message[ACTION] == EXIT and\
+            TIME in message and\
+            FROM in message:
+        log.info(f'Пользователь {message[FROM]} отключился от сервера')
+        clients.remove(usernames[message[FROM]])
+        usernames[message[FROM]].close()
+        del usernames[message[FROM]]
     else:
         send_message(client, {RESPONSE: '400', ERROR: 'Bad request'})
     return
