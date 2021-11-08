@@ -52,55 +52,47 @@ def server_args():
     return namespace.port, namespace.listen_host
 
 
-# @log_it
-# def process_message(message):
-#     if ACTION in message and\
-#             message[ACTION] == PRESENCE and\
-#             TIME in message and\
-#             USER in message:
-#         print(f'{message[TIME]} Получено сообщение о присутствии '
-#               f' от пользователя {message[USER][ACCOUNT_NAME]}')
-#         return {RESPONSE: '200'}
-#     elif ACTION in message and\
-#             message[ACTION] == MESSAGE and\
-#             TIME in message and\
-#             FROM in message and\
-#             TO in message and\
-#             MESSAGE_TEXT in message:
-#         print(f'{message[TIME]} Получено сообщение\n'
-#               f'от пользователя {message[FROM]}\n'
-#               f'пользователю {message[TO]}\n'
-#               f'с текстом {message[MESSAGE_TEXT]}')
-#         return {RESPONSE: '200'}
-#     return {
-#         RESPONSE: '400',
-#         ERROR: 'Bad request'
-#     }
-
-
 @log_it
-def process_message(message, message_list, client):
+def process_message(message, message_list, client, usernames, clients):
     if ACTION in message and\
             message[ACTION] == PRESENCE and\
             TIME in message and\
             USER in message:
         print(f'{message[TIME]} Получено сообщение о присутствии '
               f' от пользователя {message[USER][ACCOUNT_NAME]}')
+        usernames[message[USER][ACCOUNT_NAME]] = client
         send_message(client, {RESPONSE: '200'})
         return
     elif ACTION in message and\
             message[ACTION] == MESSAGE and\
             TIME in message and\
-            FROM in message and\
+            FROM in message and \
+            TO in message and \
             MESSAGE_TEXT in message:
         print(f'{message[TIME]} Получено сообщение\n'
               f'от пользователя {message[FROM]}\n'
+              f'пользователю {message[TO]}\n'
               f'с текстом {message[MESSAGE_TEXT]}')
-        message_list.append((message[FROM], message[MESSAGE_TEXT]))
+        message_list.append(message)
         return
     else:
         send_message(client, {RESPONSE: '400', ERROR: 'Bad request'})
     return
+
+
+@log_it
+def send_message_from_server(message, usernames, clients):
+    if message[TO] == '':
+        message[MESSAGE_TEXT] = f'(Всем) {message[MESSAGE_TEXT]}'
+        for client in clients:
+            try:
+                send_message(client, message)
+            except Exception:
+                pass
+    elif message[TO] in usernames and usernames[message[TO]] in clients:
+        send_message(usernames[message[TO]], message)
+    else:
+        log.info(f'Пользователь с именем {message[TO]} отсутствует на сервере.')
 
 
 def main():
@@ -113,6 +105,7 @@ def main():
     server_socket.settimeout(0.2)
 
     clients = []
+    usernames = dict()
     messages = []
 
     server_socket.listen(MAX_CONNECTIONS)
@@ -141,25 +134,37 @@ def main():
                 try:
                     process_message(receive_message(active_client),
                                     messages,
-                                    active_client)
+                                    active_client,
+                                    usernames,
+                                    clients)
                 except:
                     log.error(f'Клиент {active_client} отключился')
                     clients.remove(active_client)
 
-        if messages and send_list:
-            message = {
-                ACTION: MESSAGE,
-                TIME: time.time(),
-                FROM: messages[0][0],
-                MESSAGE_TEXT: messages[0][1],
-            }
-            del messages[0]
-            for active_client in send_list:
-                try:
-                    send_message(active_client, message)
-                except:
-                    log.error(f'Клиент {active_client} отключился')
-                    clients.remove(active_client)
+        for message in messages:
+            try:
+                send_message_from_server(message, usernames, send_list)
+            except Exception:
+                log.info(f'Связь с пользователем {message[TO]} прервана')
+                clients.remove(usernames[message[TO]])
+                del usernames[message[TO]]
+        messages.clear()
+
+
+        # if messages and send_list:
+        #     message = {
+        #         ACTION: MESSAGE,
+        #         TIME: time.time(),
+        #         FROM: messages[0][0],
+        #         MESSAGE_TEXT: messages[0][1],
+        #     }
+        #     del messages[0]
+        #     for active_client in send_list:
+        #         try:
+        #             send_message(active_client, message)
+        #         except:
+        #             log.error(f'Клиент {active_client} отключился')
+        #             clients.remove(active_client)
 
 
 if __name__ == '__main__':
