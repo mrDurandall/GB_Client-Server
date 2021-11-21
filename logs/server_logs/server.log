@@ -197,3 +197,15 @@
 2021-11-21 18:27:18   DEBUG      server-class.py           Вызвана функция receive_message из модуля common.utils с параметрами (<socket.socket fd=284, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 9998), raddr=('127.0.0.1', 63223)>,), {}. Вызов произведен из функции main() файла server-class.py.
 2021-11-21 18:27:18   DEBUG      server-class.py           Вызвана функция send_message из модуля common.utils с параметрами (<socket.socket fd=284, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 9998), raddr=('127.0.0.1', 63223)>, {'action': 'request_users', 'time': 1637508438.081383, 'message_text': 'На сервере: \n tid', 'to': 'tid'}), {}. Вызов произведен из функции main() файла server-class.py.
 2021-11-21 18:27:18   DEBUG      server-class.py           Вызвана функция process_message из модуля __main__ с параметрами (<__main__.Server object at 0x0000028218BB5070>, {'action': 'request_users', 'from': 'tid', 'time': 1637508438.0503824}, <socket.socket fd=284, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 9998), raddr=('127.0.0.1', 63223)>), {}. Вызов произведен из функции main() файла server-class.py.
+2021-11-21 20:28:31   DEBUG      server-class.py           Вызвана функция server_args из модуля __main__ с параметрами (), {}. Вызов произведен из функции main() файла server-class.py.
+2021-11-21 20:28:31   INFO       server-class.py           Запущен сервер. Принимаем сообщения от: , порт для подключения: 9998
+2021-11-21 20:32:38   DEBUG      server-class.py           Вызвана функция server_args из модуля __main__ с параметрами (), {}. Вызов произведен из функции main() файла server-class.py.
+2021-11-21 20:32:38   INFO       server-class.py           Запущен сервер. Принимаем сообщения от: , порт для подключения: 9998
+2021-11-21 20:37:25   DEBUG      server-class.py           Вызвана функция server_args из модуля __main__ с параметрами (), {}. Вызов произведен из функции main() файла server-class.py.
+2021-11-21 20:37:25   INFO       server-class.py           Запущен сервер. Принимаем сообщения от: , порт для подключения: 9998
+2021-11-21 20:38:03   DEBUG      server-class.py           Вызвана функция server_args из модуля __main__ с параметрами (), {}. Вызов произведен из функции main() файла server-class.py.
+2021-11-21 20:38:03   INFO       server-class.py           Запущен сервер. Принимаем сообщения от: , порт для подключения: 9998
+2021-11-21 20:38:41   DEBUG      server-class.py           Вызвана функция server_args из модуля __main__ с параметрами (), {}. Вызов произведен из функции main() файла server-class.py.
+2021-11-21 20:38:41   INFO       server-class.py           Запущен сервер. Принимаем сообщения от: , порт для подключения: 9998
+2021-11-21 20:48:43   DEBUG      server-class.py           Вызвана функция server_args из модуля __main__ с параметрами (), {}. Вызов произведен из функции main() файла server-class.py.
+2021-11-21 20:48:43   INFO       server-class.py           Запущен сервер. Принимаем сообщения от: , порт для подключения: 9998

@@ -17,11 +17,13 @@ from common.variables import *
 
 from common.descriptors import CorrectPort
 
+from common.meta import ServerVerifier
+
 
 log = logging.getLogger('server_log')
 
 
-class Server:
+class Server(metaclass=ServerVerifier):
 
     listen_port = CorrectPort()
 

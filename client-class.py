@@ -13,12 +13,13 @@ from common.utils import send_message, receive_message
 from common.variables import *
 from common.decorators import log_it
 from common.descriptors import CorrectPort
+from common.meta import ClientVerifier
 
 
 log = logging.getLogger('client_log')
 
 
-class Client:
+class Client(metaclass=ClientVerifier):
 
     server_port = CorrectPort()
 
