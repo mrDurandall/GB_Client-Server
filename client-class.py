@@ -12,12 +12,15 @@ import logs.client_log_config
 from common.utils import send_message, receive_message
 from common.variables import *
 from common.decorators import log_it
+from common.descriptors import CorrectPort
 
 
 log = logging.getLogger('client_log')
 
 
 class Client:
+
+    server_port = CorrectPort()
 
     def __init__(self, server_port, host_number, username):
 
@@ -121,7 +124,6 @@ class Client:
         while True:
             try:
                 answer = receive_message(self.socket)
-                print(answer)
                 if ACTION in answer.keys() and answer[ACTION] == REQUEST_USERS:
                     print(f'{answer[MESSAGE_TEXT]}')
                 else:
@@ -186,8 +188,6 @@ def client_args():
                         )
 
     namespace = parser.parse_args()
-
-    print(namespace)
 
     if not 1023 < namespace.port < 65536:
         log.critical('Прослушиваемый порт должен быть в диапазоне от 1025 до 65635')
