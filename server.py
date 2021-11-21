@@ -15,8 +15,154 @@ from common.utils import send_message, receive_message
 
 from common.variables import *
 
+from common.descriptors import CorrectPort
+
+from common.meta import ServerVerifier
+
 
 log = logging.getLogger('server_log')
+
+
+class Server(metaclass=ServerVerifier):
+
+    listen_port = CorrectPort()
+
+    def __init__(self, listen_port, listen_host):
+        self.port = listen_port
+        self.host = listen_host
+
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.bind((self.host, self.port))
+        self.socket.settimeout(0.2)
+
+        self.clients = []
+        self.usernames = dict()
+        self.messages = []
+        pass
+
+    def mainloop(self):
+        self.socket.listen(MAX_CONNECTIONS)
+
+        while True:
+            try:
+                client, address = self.socket.accept()
+            except OSError:
+                pass
+            else:
+                log.info(f'Установлено соединение с клиентом по адресу {address}')
+                self.clients.append(client)
+
+            recv_list = []
+            send_list = []
+            err_list = []
+
+            try:
+                if self.clients:
+                    recv_list, send_list, err_list = select.select(self.clients, self.clients, [], 0)
+            except OSError:
+                pass
+
+            if recv_list:
+                for active_client in recv_list:
+                    try:
+                        self.process_message(receive_message(active_client),
+                                             active_client)
+                    except:
+                        log.error(f'Клиент {active_client} отключился')
+                        self.clients.remove(active_client)
+
+            for message in self.messages:
+                try:
+                    self.send_message_from_server(message, send_list)
+                except Exception:
+                    log.info(f'Связь с пользователем {message[TO]} прервана')
+                    self.clients.remove(self.usernames[message[TO]])
+                    del self.usernames[message[TO]]
+            self.messages.clear()
+
+    @log_it
+    def send_message_from_server(self, message, clients):
+        if message[TO] == '':
+            message[MESSAGE_TEXT] = f'(Всем) {message[MESSAGE_TEXT]}'
+            for client in clients:
+                try:
+                    send_message(client, message)
+                except Exception:
+                    pass
+        elif message[TO] in self.usernames and self.usernames[message[TO]] in clients:
+            send_message(self.usernames[message[TO]], message)
+        else:
+            log.info(f'Пользователь с именем {message[TO]} отсутствует на сервере.')
+
+    @log_it
+    def process_message(self, message, client):
+        if self.is_presence(message):
+            if message[USER][ACCOUNT_NAME] not in self.usernames:
+                print(f'{message[TIME]} Получено сообщение о присутствии '
+                      f' от пользователя {message[USER][ACCOUNT_NAME]}')
+                self.usernames[message[USER][ACCOUNT_NAME]] = client
+                send_message(client, {RESPONSE: '200'})
+            else:
+                send_message(client, {RESPONSE: '400', ERROR: 'Имя уже занято!'})
+                self.clients.remove(client)
+                client.close()
+            return
+        elif self.is_request_users(message):
+            print(f'{message[TIME]} Получен запрос списка пользователей'
+                  f' от пользователя {message[FROM]}')
+            users_list = {
+                ACTION: REQUEST_USERS,
+                TIME: time.time(),
+                MESSAGE_TEXT: f'На сервере: \n {" ".join(list(self.usernames.keys()))}',
+                TO: message[FROM]
+            }
+            send_message(client, users_list)
+            return
+        elif self.is_message(message):
+            print(f'{message[TIME]} Получено сообщение\n'
+                  f'от пользователя {message[FROM]}\n'
+                  f'пользователю {message[TO]}\n'
+                  f'с текстом {message[MESSAGE_TEXT]}')
+            self.messages.append(message)
+            return
+        elif self.is_exit(message):
+            log.info(f'Пользователь {message[FROM]} отключился от сервера')
+            self.clients.remove(self.usernames[message[FROM]])
+            self.usernames[message[FROM]].close()
+            del self.usernames[message[FROM]]
+        else:
+            send_message(client, {RESPONSE: '400', ERROR: 'Bad request'})
+        return
+
+    @staticmethod
+    def is_presence(message):
+        return ACTION in message and\
+               message[ACTION] == PRESENCE and\
+               TIME in message and\
+               USER in message
+
+    @staticmethod
+    def is_request_users(message):
+        return ACTION in message and\
+               message[ACTION] == REQUEST_USERS and\
+               TIME in message and\
+               FROM in message
+
+    @staticmethod
+    def is_message(message):
+        return ACTION in message and\
+               message[ACTION] == MESSAGE and\
+               TIME in message and\
+               FROM in message and\
+               TO in message and\
+               MESSAGE_TEXT in message
+
+    @staticmethod
+    def is_exit(message):
+        return ACTION in message and\
+               message[ACTION] == EXIT and\
+               TIME in message and\
+               FROM in message
 
 
 @log_it
@@ -52,146 +198,14 @@ def server_args():
     return namespace.port, namespace.listen_host
 
 
-@log_it
-def process_message(message, message_list, client, usernames, clients):
-    if ACTION in message and\
-            message[ACTION] == PRESENCE and\
-            TIME in message and\
-            USER in message:
-        if message[USER][ACCOUNT_NAME] not in usernames:
-            print(f'{message[TIME]} Получено сообщение о присутствии '
-                  f' от пользователя {message[USER][ACCOUNT_NAME]}')
-            usernames[message[USER][ACCOUNT_NAME]] = client
-            send_message(client, {RESPONSE: '200'})
-        else:
-            send_message(client, {RESPONSE: '400', ERROR: 'Имя уже занято!'})
-            clients.remove(client)
-            client.close()
-        return
-    elif ACTION in message and\
-            message[ACTION] == REQUEST_USERS and\
-            TIME in message and\
-            FROM in message:
-        print(f'{message[TIME]} Получен запрос списка пользователей'
-              f' от пользователя {message[FROM]}')
-        users_list = {
-            ACTION: REQUEST_USERS,
-            TIME: time.time(),
-            MESSAGE_TEXT: f'На сервере: \n {" ".join(list(usernames.keys()))}',
-            TO: message[FROM]
-        }
-        send_message(client, users_list)
-        return
-    elif ACTION in message and\
-            message[ACTION] == MESSAGE and\
-            TIME in message and\
-            FROM in message and \
-            TO in message and \
-            MESSAGE_TEXT in message:
-        print(f'{message[TIME]} Получено сообщение\n'
-              f'от пользователя {message[FROM]}\n'
-              f'пользователю {message[TO]}\n'
-              f'с текстом {message[MESSAGE_TEXT]}')
-        message_list.append(message)
-        return
-    elif ACTION in message and\
-            message[ACTION] == EXIT and\
-            TIME in message and\
-            FROM in message:
-        log.info(f'Пользователь {message[FROM]} отключился от сервера')
-        clients.remove(usernames[message[FROM]])
-        usernames[message[FROM]].close()
-        del usernames[message[FROM]]
-    else:
-        send_message(client, {RESPONSE: '400', ERROR: 'Bad request'})
-    return
-
-
-@log_it
-def send_message_from_server(message, usernames, clients):
-    if message[TO] == '':
-        message[MESSAGE_TEXT] = f'(Всем) {message[MESSAGE_TEXT]}'
-        for client in clients:
-            try:
-                send_message(client, message)
-            except Exception:
-                pass
-    elif message[TO] in usernames and usernames[message[TO]] in clients:
-        send_message(usernames[message[TO]], message)
-    else:
-        log.info(f'Пользователь с именем {message[TO]} отсутствует на сервере.')
-
-
 def main():
 
     listen_port, listen_host = server_args()
     log.info(f'Запущен сервер. Принимаем сообщения от: {listen_host}, порт для подключения: {listen_port}')
 
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind((listen_host, listen_port))
-    server_socket.settimeout(0.2)
+    current_server = Server(listen_port, listen_host)
 
-    clients = []
-    usernames = dict()
-    messages = []
-
-    server_socket.listen(MAX_CONNECTIONS)
-
-    while True:
-        try:
-            client, address = server_socket.accept()
-        except OSError:
-            pass
-        else:
-            log.info(f'Установлено соединение с клиентом по адресу {address}')
-            clients.append(client)
-
-        recv_list = []
-        send_list = []
-        err_list = []
-
-        try:
-            if clients:
-                recv_list, send_list, err_list = select.select(clients, clients, [], 0)
-        except OSError:
-            pass
-
-        if recv_list:
-            for active_client in recv_list:
-                try:
-                    process_message(receive_message(active_client),
-                                    messages,
-                                    active_client,
-                                    usernames,
-                                    clients)
-                except:
-                    log.error(f'Клиент {active_client} отключился')
-                    clients.remove(active_client)
-
-        for message in messages:
-            try:
-                send_message_from_server(message, usernames, send_list)
-            except Exception:
-                log.info(f'Связь с пользователем {message[TO]} прервана')
-                clients.remove(usernames[message[TO]])
-                del usernames[message[TO]]
-        messages.clear()
-
-
-        # if messages and send_list:
-        #     message = {
-        #         ACTION: MESSAGE,
-        #         TIME: time.time(),
-        #         FROM: messages[0][0],
-        #         MESSAGE_TEXT: messages[0][1],
-        #     }
-        #     del messages[0]
-        #     for active_client in send_list:
-        #         try:
-        #             send_message(active_client, message)
-        #         except:
-        #             log.error(f'Клиент {active_client} отключился')
-        #             clients.remove(active_client)
+    current_server.mainloop()
 
 
 if __name__ == '__main__':
