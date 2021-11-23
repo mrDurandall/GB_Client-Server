@@ -19,6 +19,8 @@ from common.descriptors import CorrectPort
 
 from common.meta import ServerVerifier
 
+from server_DB import ServerDatabase
+
 
 log = logging.getLogger('server_log')
 
@@ -28,6 +30,9 @@ class Server(metaclass=ServerVerifier):
     listen_port = CorrectPort()
 
     def __init__(self, listen_port, listen_host):
+
+        self.database = ServerDatabase()
+
         self.port = listen_port
         self.host = listen_host
 
@@ -101,7 +106,10 @@ class Server(metaclass=ServerVerifier):
                 print(f'{message[TIME]} Получено сообщение о присутствии '
                       f' от пользователя {message[USER][ACCOUNT_NAME]}')
                 self.usernames[message[USER][ACCOUNT_NAME]] = client
+                client_ip, client_port = client.getpeername()
+                self.database.login(message[USER][ACCOUNT_NAME], client_ip, client_port)
                 send_message(client, {RESPONSE: '200'})
+                print(client)
             else:
                 send_message(client, {RESPONSE: '400', ERROR: 'Имя уже занято!'})
                 self.clients.remove(client)
@@ -127,6 +135,7 @@ class Server(metaclass=ServerVerifier):
             return
         elif self.is_exit(message):
             log.info(f'Пользователь {message[FROM]} отключился от сервера')
+            self.database.logout(message[FROM])
             self.clients.remove(self.usernames[message[FROM]])
             self.usernames[message[FROM]].close()
             del self.usernames[message[FROM]]
