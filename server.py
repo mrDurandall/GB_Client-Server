@@ -3,11 +3,17 @@ import json
 import sys
 import logging
 import time
-
+import os
 import logs.server_log_config
 import argparse
 import select
 import ipaddress
+from threading import Thread, Lock
+
+import configparser
+
+from PyQt5.QtWidgets import QApplication, QMessageBox
+from PyQt5.QtCore import QTimer
 
 from common.decorators import log_it
 
@@ -21,8 +27,13 @@ from common.meta import ServerVerifier
 
 from server_DB import ServerDatabase
 
+from server_GUI import *
+
 
 log = logging.getLogger('server_log')
+
+new_connection = False
+conflag_lock = Lock()
 
 
 class Server(metaclass=ServerVerifier):
@@ -43,6 +54,7 @@ class Server(metaclass=ServerVerifier):
         self.clients = []
         self.usernames = dict()
         self.messages = []
+        print(self.database.session.query(self.database.AllUsers.username).all())
         pass
 
     def mainloop(self):
@@ -101,15 +113,18 @@ class Server(metaclass=ServerVerifier):
 
     @log_it
     def process_message(self, message, client):
+        global new_connection
         if self.is_presence(message):
             if message[USER][ACCOUNT_NAME] not in self.usernames:
                 print(f'{message[TIME]} Получено сообщение о присутствии '
                       f' от пользователя {message[USER][ACCOUNT_NAME]}')
                 self.usernames[message[USER][ACCOUNT_NAME]] = client
+                print(message[USER][ACCOUNT_NAME])
                 client_ip, client_port = client.getpeername()
-                self.database.login(message[USER][ACCOUNT_NAME], client_ip, client_port)
                 send_message(client, {RESPONSE: '200'})
-                print(client)
+                self.database.login(message[USER][ACCOUNT_NAME], client_ip, client_port)
+                with conflag_lock:
+                    new_connection = True
             else:
                 send_message(client, {RESPONSE: '400', ERROR: 'Имя уже занято!'})
                 self.clients.remove(client)
@@ -139,6 +154,8 @@ class Server(metaclass=ServerVerifier):
             self.clients.remove(self.usernames[message[FROM]])
             self.usernames[message[FROM]].close()
             del self.usernames[message[FROM]]
+            with conflag_lock:
+                new_connection = True
         else:
             send_message(client, {RESPONSE: '400', ERROR: 'Bad request'})
         return
@@ -209,12 +226,89 @@ def server_args():
 
 def main():
 
-    listen_port, listen_host = server_args()
+    config = configparser.ConfigParser()
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    config.read(f'{dir_path}/server.ini')
+    # listen_port, listen_host = server_args()
+    listen_port, listen_host = int(config['SETTINGS']['port']), config['SETTINGS']['listen_address']
     log.info(f'Запущен сервер. Принимаем сообщения от: {listen_host}, порт для подключения: {listen_port}')
 
     current_server = Server(listen_port, listen_host)
 
-    current_server.mainloop()
+    server_thread = Thread(target=current_server.mainloop)
+    server_thread.name = 'Server Thread'
+    server_thread.daemon = True
+    server_thread.start()
+
+    server_app = QApplication(sys.argv)
+    main_window = MainWindow()
+
+    main_window.statusBar().showMessage('Server Working')
+    main_window.active_clients_table.setModel(gui_create_model(current_server.database))
+    main_window.active_clients_table.resizeColumnsToContents()
+    main_window.active_clients_table.resizeRowsToContents()
+
+    def list_update():
+        global new_connection
+        if new_connection:
+            main_window.active_clients_table.setModel(
+                gui_create_model(current_server.database))
+            main_window.active_clients_table.resizeColumnsToContents()
+            main_window.active_clients_table.resizeRowsToContents()
+            with conflag_lock:
+                new_connection = False
+
+    def show_statistics():
+        global stat_window
+        stat_window = HistoryWindow()
+        stat_window.history_table.setModel(create_stat_model(current_server.database))
+        stat_window.history_table.resizeColumnsToContents()
+        stat_window.history_table.resizeRowsToContents()
+        stat_window.show()
+
+    def server_config():
+        global config_window
+        # Создаём окно и заносим в него текущие параметры
+        config_window = ConfigWindow()
+        config_window.db_path.insert(config['SETTINGS']['Database_path'])
+        config_window.db_file.insert(config['SETTINGS']['Database_file'])
+        config_window.port.insert(config['SETTINGS']['port'])
+        config_window.ip.insert(config['SETTINGS']['Listen_Address'])
+        config_window.save_btn.clicked.connect(save_server_config)
+
+    def save_server_config():
+        global config_window
+        message = QMessageBox()
+        config['SETTINGS']['Database_path'] = config_window.db_path.text()
+        config['SETTINGS']['Database_file'] = config_window.db_file.text()
+        try:
+            port = int(config_window.port.text())
+        except ValueError:
+            message.warning(config_window, 'Ошибка', 'Порт должен быть числом')
+        else:
+            config['SETTINGS']['Listen_Address'] = config_window.ip.text()
+            if 1023 < port < 65536:
+                config['SETTINGS']['port'] = str(port)
+                print(port)
+                with open('server.ini', 'w') as conf:
+                    config.write(conf)
+                    message.information(
+                        config_window, 'OK', 'Настройки успешно сохранены!')
+            else:
+                message.warning(
+                    config_window,
+                    'Ошибка',
+                    'Порт должен быть от 1024 до 65536')
+
+    timer = QTimer()
+    timer.timeout.connect(list_update)
+    timer.start(1000)
+
+    main_window.refresh_button.triggered.connect(list_update)
+    main_window.show_history_button.triggered.connect(show_statistics)
+    main_window.config_btn.triggered.connect(server_config)
+
+    server_app.exec_()
 
 
 if __name__ == '__main__':
