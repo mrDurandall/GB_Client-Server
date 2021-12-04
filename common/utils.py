@@ -1,5 +1,6 @@
 import json
 import sys
+import ipaddress
 
 from common.variables import ENCODING, MAX_PACKAGE, DEFAULT_PORT, DEFAULT_HOST
 
@@ -28,6 +29,18 @@ def receive_message(client):
             return response
         raise ValueError
     raise ValueError
+
+
+def ip_check(ip):
+    try:
+        ipaddress.ip_address(ip)
+        return ip
+    except ValueError:
+        return None
+
+
+def port_check(port):
+    return 1023 < port < 65536
 
 
 # @log_it
